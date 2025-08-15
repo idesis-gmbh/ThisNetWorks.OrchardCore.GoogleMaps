@@ -353,3 +353,5 @@ samples/Localization/
 samples/ThisNetWorks.OrchardCore.GoogleMaps.Sample/App_Data
 samples/ThisNetWorks.OrchardCore.GoogleMaps.Sample/Localization
 samples/ThisNetWorks.OrchardCore.GoogleMaps.Sample/wwwroot/is-cache
+.idea
+**/.DS_Store

@@ -38,13 +38,15 @@ namespace ThisNetWorks.OrchardCore.GoogleMaps.Drivers
             );
         }
 
-        public override IDisplayResult Edit(GoogleMapPart part)
+        public override Task<IDisplayResult> EditAsync(GoogleMapPart part, BuildPartEditorContext context)
         {
-            return Initialize<GoogleMapPartEditViewModel>("GoogleMapPart_Edit", async m => await BuildEditViewModel(m, part));
+            var result = (IDisplayResult)Initialize<GoogleMapPartEditViewModel>("GoogleMapPart_Edit", async m => await BuildEditViewModel(m, part));
+            return Task.FromResult(result);
         }
 
-        public override async Task<IDisplayResult> UpdateAsync(GoogleMapPart part, IUpdateModel updater)
+        public override async Task<IDisplayResult> UpdateAsync(GoogleMapPart part, UpdatePartEditorContext context)
         {
+            var updater = context.Updater;
             var model = new GoogleMapPartEditViewModel();
 
             await updater.TryUpdateModelAsync(model, Prefix);
@@ -60,7 +62,7 @@ namespace ThisNetWorks.OrchardCore.GoogleMaps.Drivers
                 updater.ModelState.AddModelError(Prefix, S["The JSON is written in an incorrect format."]);
             }
 
-            return Edit(part);
+            return await EditAsync(part, context);
         }
 
         private async Task BuildViewModel(GoogleMapPartViewModel model, GoogleMapPart part)

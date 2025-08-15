@@ -45,11 +45,11 @@ namespace ThisNetWorks.OrchardCore.GoogleMaps.Sample
 
             await _shellFeatureManager.EnableFeaturesAsync(featuresToEnable, true);
 
-            var ctds = _contentDefinitionManager.ListPartDefinitions();
+            var ctds = await _contentDefinitionManager.ListPartDefinitionsAsync().ConfigureAwait(false);
             if (ctds.FirstOrDefault(x => x.Name == "BlogPost") != null)
             {
-                _contentDefinitionManager.AlterTypeDefinition("BlogPost", builder => builder
-                    .WithPart("GoogleMapPart"));
+                await _contentDefinitionManager.AlterTypeDefinitionAsync("BlogPost", builder => builder
+                    .WithPart("GoogleMapPart")).ConfigureAwait(false);
 
                 var query = _session.Query<ContentItem>()
                     .With<ContentItemIndex>(x => x.ContentType == "BlogPost" && x.Published);

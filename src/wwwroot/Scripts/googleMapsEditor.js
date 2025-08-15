@@ -22,7 +22,7 @@ var mapInit = function mapInit() {
     googleMapsEditor.setAutocomplete();
   }
 
-  map.addListener('click', function (e) {
+  map.addEventListener('click', function (e) {
     if (!googleMapsEditor) {
       console.log('error in vue app');
       return;
@@ -249,7 +249,7 @@ function initializeGoogleMapsEditor(elem, data, modalBodyId) {
               map: map
             });
             markers.push(marker);
-            var listener = google.maps.event.addListener(marker, 'dragend', function (e) {
+            var listener = google.maps.event.addEventListener(marker, 'dragend', function (e) {
               var draggedPolygon = self.state.polygons.splice(polygonI, 1)[0];
               var latLng = draggedPolygon.latLngs[pointI];
               latLng.lat = e.latLng.lat();
@@ -264,7 +264,7 @@ function initializeGoogleMapsEditor(elem, data, modalBodyId) {
 
         if (polygonShapes[polygonI] && polygonShapes[polygonI].shape) {
           polygonShapes[polygonI].listeners.forEach(function (listener) {
-            google.maps.event.removeListener(listener);
+            google.maps.event.removeEventListener(listener);
             listener = null;
           });
           polygonShapes[polygonI].markers.forEach(function (marker, index) {
@@ -301,7 +301,7 @@ function initializeGoogleMapsEditor(elem, data, modalBodyId) {
       setAutocomplete: function setAutocomplete() {
         autocomplete = new google.maps.places.Autocomplete(this.$refs.location);
         places = new google.maps.places.PlacesService(map);
-        autocomplete.addListener('place_changed', function () {
+        autocomplete.addEventListener('place_changed', function () {
           var place = autocomplete.getPlace();
 
           if (place.geometry) {

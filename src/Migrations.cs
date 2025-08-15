@@ -1,4 +1,5 @@
-﻿using OrchardCore.ContentManagement.Metadata.Settings;
+﻿using System.Threading.Tasks;
+using OrchardCore.ContentManagement.Metadata.Settings;
 using OrchardCore.ContentManagement.Metadata;
 using OrchardCore.Data.Migration;
 using OrchardCore.ContentManagement.Records;
@@ -16,24 +17,24 @@ namespace ThisNetWorks.OrchardCore.GoogleMaps
             _contentDefinitionManager = contentDefinitionManager;
         }
 
-        public int Create()
+        public async Task<int> CreateAsync()
         {
-            _contentDefinitionManager.AlterPartDefinition("GoogleMapPart", builder => builder
+            await _contentDefinitionManager.AlterPartDefinitionAsync("GoogleMapPart", builder => builder
                 .Attachable()
                 .WithDescription("Provides a Google Map part for your content item."));
 
             return 1;
         }
 
-        public int UpdateFrom1()
+        public async Task<int> UpdateFrom1Async()
         {
-            SchemaBuilder.CreateMapIndexTable<GoogleMapPartIndex>(table => table
+            await SchemaBuilder.CreateMapIndexTableAsync<GoogleMapPartIndex>(table => table
                 .Column<string>("ContentType", column => column.WithLength(ContentItemIndex.MaxContentTypeSize))
             );
 
             // Index on content type as that is most likely to be used for retrieving data from index
             // without having to query document table as well.
-            SchemaBuilder.AlterTable(nameof(GoogleMapPartIndex), table => table
+            await SchemaBuilder.AlterTableAsync(nameof(GoogleMapPartIndex), table => table
                 .CreateIndex("IDX_GoogleMapPartIndex_ContentType", "DocumentId", "ContentType")
             );
 

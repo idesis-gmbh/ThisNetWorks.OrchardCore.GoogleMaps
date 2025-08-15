@@ -15,11 +15,11 @@ namespace ThisNetWorks.OrchardCore.GoogleMaps
         }
 
 
-        public Task BuildNavigationAsync(string name, NavigationBuilder builder)
+        public ValueTask BuildNavigationAsync(string name, NavigationBuilder builder)
         {
             if (!string.Equals(name, "admin", StringComparison.OrdinalIgnoreCase))
             {
-                return Task.CompletedTask;
+                return ValueTask.CompletedTask;
             }
 
             builder
@@ -31,7 +31,7 @@ namespace ThisNetWorks.OrchardCore.GoogleMaps
                             .LocalNav()
                         )));
 
-            return Task.CompletedTask;
+            return ValueTask.CompletedTask;
         }
     }
 }
