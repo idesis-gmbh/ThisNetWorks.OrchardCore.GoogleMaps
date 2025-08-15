@@ -62,7 +62,7 @@ namespace ThisNetWorks.OrchardCore.GoogleMaps.Sample
                         part.Marker = new LatLng { Lat = GoogleMapsSettings.DefaultLatitude, Lng = GoogleMapsSettings.DefaultLongitude };
                     });
 
-                    _session.Save(blogPost);
+                    await _session.SaveAsync(blogPost).ConfigureAwait(false);
                 }
             }
         }
