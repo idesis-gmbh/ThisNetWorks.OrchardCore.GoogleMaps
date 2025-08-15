@@ -1,5 +1,7 @@
 # ThisNetWorks.OrchardCore.GoogleMaps
 
+> **Annotiation**: This is a fork of the original repository [ThisNetWorks.OrchardCore.GoogleMaps](https://github.com/ThisNetWorks/ThisNetWorks.OrchardCore.GoogleMaps), updated for **Orchard Core Version 2.1.8** and later.
+
 Google Maps Module for Orchard Core
 
 This provides an extensible Google Maps module for Orchard Core
@@ -66,3 +68,17 @@ and will required a configured CloudSmith NuGet feed. Refer [Configuring a previ
 
 e.g. `1.1.0-preview-16439` refers to the CloudSmith Orchard Core prerelease build `v1.1.0-preview-16439`
 
+### Updated Fork for Orchard Core 2.1.8
+
+This fork has been updated to work with **Orchard Core 2.1.8** (August 2025).  
+All dependencies were updated, and necessary code adjustments were made to ensure compatibility.
+
+The original module was targeting an older Orchard Core version from the MyGet or CloudSmith preview feeds.
+
+This version uses official NuGet packages from Orchard Core 2.1.8 and has been tested with a standard blog recipe.
+
+### Credits
+
+Original repository maintained by [ThisNetWorks](https://github.com/ThisNetWorks).  
+This fork maintained by [Andreas Mersch / idesis GmbH] to support Orchard Core 2.1.8.  
+Licensed under the [BSD-3-Clause License](./LICENSE).
