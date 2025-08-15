@@ -4,41 +4,38 @@ using OrchardCore.DisplayManagement.Views;
 using OrchardCore.Settings;
 using System.Threading.Tasks;
 
-namespace ThisNetWorks.OrchardCore.GoogleMaps.Settings
+namespace ThisNetWorks.OrchardCore.GoogleMaps.Settings;
+
+public class GoogleMapsSettingsDisplayDriver : SectionDisplayDriver<ISite, GoogleMapsSettings>
 {
-    public class GoogleMapsSettingsDisplayDriver : SectionDisplayDriver<ISite, GoogleMapsSettings>
+    public const string GroupId = "googlemaps";
+
+    public override Task<IDisplayResult> EditAsync(ISite model, GoogleMapsSettings settings, BuildEditorContext context)
     {
-        public const string GroupId = "googlemaps";
-
-        public override Task<IDisplayResult> EditAsync(ISite model, GoogleMapsSettings settings, BuildEditorContext context)
+        IDisplayResult result = Initialize<GoogleMapsSettingsViewModel>("GoogleMapsSettings_Edit", m =>
         {
-            var result = (IDisplayResult)Initialize<GoogleMapsSettingsViewModel>("GoogleMapsSettings_Edit", model =>
-            {
-                model.ApiKey = settings.ApiKey;
-                model.Location = settings.Location;
-                model.DefaultMarker = settings.DefaultMarker;
-                model.GoogleMapSettings = settings;
+            m.ApiKey = settings.ApiKey;
+            m.Location = settings.Location;
+            m.DefaultMarker = settings.DefaultMarker;
+            m.GoogleMapSettings = settings;
 
-            }).Location("Content").OnGroup(GroupId);
+        }).Location("Content").OnGroup(GroupId);
 
-            return Task.FromResult(result);
-        }
+        return Task.FromResult(result);
+    }
 
-        public override async Task<IDisplayResult> UpdateAsync(ISite siteSettings, GoogleMapsSettings settings, UpdateEditorContext context)
-        {
-            if (context.GroupId == GroupId)
-            {
-                var model = new GoogleMapsSettingsViewModel();
+    public override async Task<IDisplayResult> UpdateAsync(ISite siteSettings, GoogleMapsSettings settings, UpdateEditorContext context)
+    {
+        if (context.GroupId != GroupId) return await base.EditAsync(siteSettings, context);
+        var model = new GoogleMapsSettingsViewModel();
 
-                if (await context.Updater.TryUpdateModelAsync(model, Prefix, m => m.ApiKey, m => m.Location, m => m.DefaultMarker ))
-                {
-                    settings.ApiKey = model.ApiKey;
-                    settings.Location = model.Location;
-                    settings.DefaultMarker = model.DefaultMarker;
-                }
-            }
+        if (!await context.Updater.TryUpdateModelAsync(model, Prefix, m => m.ApiKey, m => m.Location,
+                m => m.DefaultMarker)) return await base.EditAsync(siteSettings, context);
+            
+        settings.ApiKey = model.ApiKey;
+        settings.Location = model.Location;
+        settings.DefaultMarker = model.DefaultMarker;
 
-            return await base.EditAsync(siteSettings, context);
-        }
+        return await base.EditAsync(siteSettings, context);
     }
 }

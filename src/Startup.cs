@@ -3,7 +3,6 @@ using Microsoft.Extensions.DependencyInjection;
 using OrchardCore.ContentManagement;
 using OrchardCore.ContentManagement.Display.ContentDisplay;
 using OrchardCore.Data.Migration;
-using OrchardCore.DisplayManagement.Descriptors;
 using OrchardCore.DisplayManagement.Handlers;
 using OrchardCore.Modules;
 using OrchardCore.Navigation;
@@ -16,31 +15,30 @@ using ThisNetWorks.OrchardCore.GoogleMaps.Settings;
 using ThisNetWorks.OrchardCore.GoogleMaps.ViewModels;
 using YesSql.Indexes;
 
-namespace ThisNetWorks.OrchardCore.GoogleMaps
+namespace ThisNetWorks.OrchardCore.GoogleMaps;
+
+public class Startup : StartupBase
 {
-    public class Startup : StartupBase
+    public override void ConfigureServices(IServiceCollection services)
     {
-        public override void ConfigureServices(IServiceCollection services)
+        services.Configure<TemplateOptions>(o =>
         {
-            services.Configure<TemplateOptions>(o =>
-            {
-                o.MemberAccessStrategy.Register<GoogleMapPartViewModel>();
-                o.MemberAccessStrategy.Register<GoogleMapsSettingsViewModel>();
-                o.MemberAccessStrategy.Register<DisplayMapViewModel>();
-            });
+            o.MemberAccessStrategy.Register<GoogleMapPartViewModel>();
+            o.MemberAccessStrategy.Register<GoogleMapsSettingsViewModel>();
+            o.MemberAccessStrategy.Register<DisplayMapViewModel>();
+        });
 
-            services.AddSingleton<IIndexProvider, GoogleMapPartIndexProvider>();
-            services.AddScoped<IDataMigration, Migrations>();
+        services.AddSingleton<IIndexProvider, GoogleMapPartIndexProvider>();
+        services.AddScoped<IDataMigration, Migrations>();
 
-            services.AddContentPart<GoogleMapPart>()
-                .UseDisplayDriver<GoogleMapPartDisplayDriver>();
+        services.AddContentPart<GoogleMapPart>()
+            .UseDisplayDriver<GoogleMapPartDisplayDriver>();
 
-            services.AddScoped<IDataMigration, Migrations>();
+        services.AddScoped<IDataMigration, Migrations>();
 
-            services.AddScoped<INavigationProvider, AdminMenu>();
-            services.AddScoped<IPermissionProvider, Permissions>();
+        services.AddScoped<INavigationProvider, AdminMenu>();
+        services.AddScoped<IPermissionProvider, Permissions>();
 
-            services.AddScoped<IDisplayDriver<ISite>, GoogleMapsSettingsDisplayDriver>();
-        }
+        services.AddScoped<IDisplayDriver<ISite>, GoogleMapsSettingsDisplayDriver>();
     }
 }

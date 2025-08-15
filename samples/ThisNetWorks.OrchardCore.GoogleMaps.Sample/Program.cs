@@ -1,27 +1,25 @@
-using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using OrchardCore.Logging;
 
-namespace ThisNetWorks.OrchardCore.GoogleMaps.Sample
+namespace ThisNetWorks.OrchardCore.GoogleMaps.Sample;
+
+public class Program
 {
-    public class Program
+    public static Task Main(string[] args)
+        => BuildHost(args).RunAsync();
+
+    private static IHost BuildHost(string[] args)
     {
-        public static Task Main(string[] args)
-            => BuildHost(args).RunAsync();
+        var host = Host.CreateDefaultBuilder(args)
+            .ConfigureLogging(logging => logging.ClearProviders())
+            .ConfigureWebHostDefaults(webBuilder => webBuilder
+                .UseNLogWeb()
+                .UseStartup<Startup>())
+            .Build();
 
-        public static IHost BuildHost(string[] args)
-        {
-            var host = Host.CreateDefaultBuilder(args)
-                .ConfigureLogging(logging => logging.ClearProviders())
-                .ConfigureWebHostDefaults(webBuilder => webBuilder
-                        .UseNLogWeb()
-                        .UseStartup<Startup>())
-                .Build();
-
-            return host;
-        }
+        return host;
     }
 }

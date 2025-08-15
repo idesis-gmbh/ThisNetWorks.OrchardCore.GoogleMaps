@@ -6,6 +6,6 @@ using OrchardCore.Modules.Manifest;
     Website = "https://github.com/ThisNetWorks/ThisNetWorks.OrchardCore.GoogleMaps",
     Version = "1.2.0",
     Description = "Google Maps Module",
-    Dependencies = new[] { "OrchardCore.Contents" },
+    Dependencies = ["OrchardCore.Contents"],
     Category = "Content Management"
 )]

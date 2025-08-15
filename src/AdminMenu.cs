@@ -4,34 +4,33 @@ using System;
 using System.Threading.Tasks;
 using ThisNetWorks.OrchardCore.GoogleMaps.Settings;
 
-namespace ThisNetWorks.OrchardCore.GoogleMaps
+namespace ThisNetWorks.OrchardCore.GoogleMaps;
+
+public class AdminMenu : INavigationProvider
 {
-    public class AdminMenu : INavigationProvider
+    private readonly IStringLocalizer _s;
+    public AdminMenu(IStringLocalizer<AdminMenu> localizer)
     {
-        private readonly IStringLocalizer S;
-        public AdminMenu(IStringLocalizer<AdminMenu> localizer)
+        _s = localizer;
+    }
+
+
+    public ValueTask BuildNavigationAsync(string name, NavigationBuilder builder)
+    {
+        if (!string.Equals(name, "admin", StringComparison.OrdinalIgnoreCase))
         {
-            S = localizer;
-        }
-
-
-        public ValueTask BuildNavigationAsync(string name, NavigationBuilder builder)
-        {
-            if (!string.Equals(name, "admin", StringComparison.OrdinalIgnoreCase))
-            {
-                return ValueTask.CompletedTask;
-            }
-
-            builder
-                .Add(S["Configuration"], configuration => configuration
-                    .Add(S["Settings"], settings => settings
-                        .Add(S["Google Maps"], S["Google Maps"], layers => layers
-                            .Action("Index", "Admin", new { area = "OrchardCore.Settings", groupId = GoogleMapsSettingsDisplayDriver.GroupId })
-                            .Permission(Permissions.ManageGoogleMaps)
-                            .LocalNav()
-                        )));
-
             return ValueTask.CompletedTask;
         }
+
+        builder
+            .Add(_s["Configuration"], configuration => configuration
+                .Add(_s["Settings"], settings => settings
+                    .Add(_s["Google Maps"], _s["Google Maps"], layers => layers
+                        .Action("Index", "Admin", new { area = "OrchardCore.Settings", groupId = GoogleMapsSettingsDisplayDriver.GroupId })
+                        .Permission(Permissions.ManageGoogleMaps)
+                        .LocalNav()
+                    )));
+
+        return ValueTask.CompletedTask;
     }
 }

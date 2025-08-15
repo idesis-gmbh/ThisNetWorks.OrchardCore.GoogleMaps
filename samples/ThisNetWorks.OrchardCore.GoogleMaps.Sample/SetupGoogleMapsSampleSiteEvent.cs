@@ -12,58 +12,57 @@ using ThisNetWorks.OrchardCore.GoogleMaps.Models;
 using ThisNetWorks.OrchardCore.GoogleMaps.Settings;
 using YesSql;
 
-namespace ThisNetWorks.OrchardCore.GoogleMaps.Sample
+namespace ThisNetWorks.OrchardCore.GoogleMaps.Sample;
+
+/// <summary>
+/// This setup event configures the GoogleMaps module, and BlogPost content items.
+/// </summary>
+public class SetupGoogleMapsSampleSiteEvent : ISetupEventHandler
 {
-    /// <summary>
-    /// This setup event configures the GoogleMaps module, and BlogPost content items.
-    /// </summary>
-    public class SetupGoogleMapsSampleSiteEvent : ISetupEventHandler
+    private readonly IContentDefinitionManager _contentDefinitionManager;
+    private readonly ISession _session;
+
+    private readonly IExtensionManager _extensionManager;
+    private readonly IShellFeaturesManager _shellFeatureManager;
+    public SetupGoogleMapsSampleSiteEvent(
+        IContentDefinitionManager contentDefinitionManager,
+        ISession session,
+        IExtensionManager extensionManager,
+        IShellFeaturesManager shellFeatureManager
+    )
     {
-        private readonly IContentDefinitionManager _contentDefinitionManager;
-        private readonly ISession _session;
+        _contentDefinitionManager = contentDefinitionManager;
+        _session = session;
+        _extensionManager = extensionManager;
+        _shellFeatureManager = shellFeatureManager;
+    }
 
-        private readonly IExtensionManager _extensionManager;
-        private readonly IShellFeaturesManager _shellFeatureManager;
-        public SetupGoogleMapsSampleSiteEvent(
-            IContentDefinitionManager contentDefinitionManager,
-            ISession session,
-            IExtensionManager extensionManager,
-            IShellFeaturesManager shellFeatureManager
-            )
+    public async Task Setup(IDictionary<string, object> properties, Action<string, string> reportError)
+    {
+        var features = _extensionManager.GetFeatures();
+
+        var featuresToEnable = features.Where(x => x.Id == "ThisNetWorks.OrchardCore.GoogleMaps");
+
+        await _shellFeatureManager.EnableFeaturesAsync(featuresToEnable, true);
+
+        var ctds = await _contentDefinitionManager.ListPartDefinitionsAsync().ConfigureAwait(false);
+        if (ctds.FirstOrDefault(x => x.Name == "BlogPost") != null)
         {
-            _contentDefinitionManager = contentDefinitionManager;
-            _session = session;
-            _extensionManager = extensionManager;
-            _shellFeatureManager = shellFeatureManager;
-        }
+            await _contentDefinitionManager.AlterTypeDefinitionAsync("BlogPost", builder => builder
+                .WithPart("GoogleMapPart")).ConfigureAwait(false);
 
-        public async Task Setup(IDictionary<string, object> properties, Action<string, string> reportError)
-        {
-            var features = _extensionManager.GetFeatures();
+            var query = _session.Query<ContentItem>()
+                .With<ContentItemIndex>(x => x.ContentType == "BlogPost" && x.Published);
 
-            var featuresToEnable = features.Where(x => x.Id == "ThisNetWorks.OrchardCore.GoogleMaps");
-
-            await _shellFeatureManager.EnableFeaturesAsync(featuresToEnable, true);
-
-            var ctds = await _contentDefinitionManager.ListPartDefinitionsAsync().ConfigureAwait(false);
-            if (ctds.FirstOrDefault(x => x.Name == "BlogPost") != null)
+            var blogPosts = await query.ListAsync();
+            foreach (var blogPost in blogPosts)
             {
-                await _contentDefinitionManager.AlterTypeDefinitionAsync("BlogPost", builder => builder
-                    .WithPart("GoogleMapPart")).ConfigureAwait(false);
-
-                var query = _session.Query<ContentItem>()
-                    .With<ContentItemIndex>(x => x.ContentType == "BlogPost" && x.Published);
-
-                var blogPosts = await query.ListAsync();
-                foreach (var blogPost in blogPosts)
+                blogPost.Alter<GoogleMapPart>(part =>
                 {
-                    blogPost.Alter<GoogleMapPart>(part =>
-                    {
-                        part.Marker = new LatLng { Lat = GoogleMapsSettings.DefaultLatitude, Lng = GoogleMapsSettings.DefaultLongitude };
-                    });
+                    part.Marker = new LatLng { Lat = GoogleMapsSettings.DefaultLatitude, Lng = GoogleMapsSettings.DefaultLongitude };
+                });
 
-                    await _session.SaveAsync(blogPost).ConfigureAwait(false);
-                }
+                await _session.SaveAsync(blogPost).ConfigureAwait(false);
             }
         }
     }

@@ -1,47 +1,45 @@
 ﻿using OrchardCore.ContentManagement;
 using OrchardCore.ContentManagement.Records;
-using System;
 using ThisNetWorks.OrchardCore.GoogleMaps.Models;
 using YesSql.Indexes;
 
-namespace ThisNetWorks.OrchardCore.GoogleMaps.Indexes
+namespace ThisNetWorks.OrchardCore.GoogleMaps.Indexes;
+
+public class GoogleMapPartIndex : MapIndex
 {
-    public class GoogleMapPartIndex : MapIndex
-    {
-        public string ContentType { get; set; }
-    }
+    public string ContentType { get; set; }
+}
 
-    public class GoogleMapPartIndexProvider : IndexProvider<ContentItem>
+public class GoogleMapPartIndexProvider : IndexProvider<ContentItem>
+{
+    public override void Describe(DescribeContext<ContentItem> context)
     {
-        public override void Describe(DescribeContext<ContentItem> context)
-        {
-            context.For<GoogleMapPartIndex>()
-                .Map(contentItem =>
+        context.For<GoogleMapPartIndex>()
+            .Map(contentItem =>
+            {
+                if (!contentItem.IsPublished())
                 {
-                    if (!contentItem.IsPublished())
-                    {
-                        return null;
-                    }
+                    return null;
+                }
 
-                    var googleMapPart = contentItem.As<GoogleMapPart>();
+                var googleMapPart = contentItem.As<GoogleMapPart>();
 
-                    if (googleMapPart == null)
-                    {
-                        return null;
-                    }
+                if (googleMapPart == null)
+                {
+                    return null;
+                }
 
-                    var googleMapPartIndex = new GoogleMapPartIndex
-                    {
-                        ContentType = contentItem.ContentType
-                    };
+                var googleMapPartIndex = new GoogleMapPartIndex
+                {
+                    ContentType = contentItem.ContentType
+                };
 
-                    if (googleMapPartIndex.ContentType?.Length > ContentItemIndex.MaxContentTypeSize)
-                    {
-                        googleMapPartIndex.ContentType = googleMapPartIndex.ContentType.Substring(ContentItemIndex.MaxContentTypeSize);
-                    }
+                if (googleMapPartIndex.ContentType?.Length > ContentItemIndex.MaxContentTypeSize)
+                {
+                    googleMapPartIndex.ContentType = googleMapPartIndex.ContentType[ContentItemIndex.MaxContentTypeSize..];
+                }
 
-                    return googleMapPartIndex;
-                });
-        }
+                return googleMapPartIndex;
+            });
     }
 }
