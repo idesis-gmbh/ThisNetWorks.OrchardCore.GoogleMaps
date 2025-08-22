@@ -1,15 +1,18 @@
 <Project>
 
   <ItemGroup>
-    <PackageReference Update="OrchardCore.Application.Cms.Targets" Version="2.1.8" />
-    <PackageReference Update="OrchardCore.ContentManagement" Version="2.1.8" />
-    <PackageReference Update="OrchardCore.ContentTypes.Abstractions" Version="2.1.8" />
-    <PackageReference Update="OrchardCore.DisplayManagement" Version="2.1.8" />
-    <PackageReference Update="OrchardCore.Logging.NLog" Version="2.1.8" />
-    <PackageReference Update="OrchardCore.Module.Targets" Version="2.1.8" />
-    <PackageReference Update="OrchardCore.Navigation.Core" Version="2.1.8" />
-    <PackageReference Update="OrchardCore.ResourceManagement" Version="2.1.8" />
-    <PackageReference Update="OrchardCore.Settings" Version="2.1.8" />
+    <PackageReference Update="OrchardCore.Application.Cms.Targets" Version="2.2.0" />
+    <PackageReference Update="OrchardCore.ContentManagement" Version="2.2.0" />
+    <PackageReference Update="OrchardCore.ContentTypes.Abstractions" Version="2.2.0" />
+    <PackageReference Update="OrchardCore.DisplayManagement" Version="2.2.0" />
+    <PackageReference Update="OrchardCore.Logging.NLog" Version="2.2.0" />
+    <PackageReference Update="OrchardCore.Module.Targets" Version="2.2.0" />
+    <PackageReference Update="OrchardCore.Navigation.Core" Version="2.2.0" />
+    <PackageReference Update="OrchardCore.ResourceManagement" Version="2.2.0" />
+    <PackageReference Update="OrchardCore.Settings" Version="2.2.0" />
     <PackageReference Update="Newtonsoft.Json" Version="13.0.3" />
+    
+    <PackageReference Update="Microsoft.Extensions.Caching.Memory" Version="9.0.8" />
+    <PackageReference Update="System.Text.Json" Version="9.0.8" />
   </ItemGroup>
 </Project>  
