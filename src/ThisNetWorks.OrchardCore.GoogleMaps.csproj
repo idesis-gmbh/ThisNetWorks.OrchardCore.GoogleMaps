@@ -16,19 +16,19 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="OrchardCore.Module.Targets" />
-    <PackageReference Include="OrchardCore.ContentManagement" />
-    <PackageReference Include="OrchardCore.ContentTypes.Abstractions" />
-    <PackageReference Include="OrchardCore.DisplayManagement" />
-    <PackageReference Include="OrchardCore.Navigation.Core" />
-    <PackageReference Include="OrchardCore.ResourceManagement" />
-    <PackageReference Include="OrchardCore.Settings" />
-    <PackageReference Include="Newtonsoft.Json" />
+    <PackageReference Include="OrchardCore.Module.Targets" Version="2.2.0" />
+    <PackageReference Include="OrchardCore.ContentManagement" Version="2.2.0" />
+    <PackageReference Include="OrchardCore.ContentTypes.Abstractions" Version="2.2.0" />
+    <PackageReference Include="OrchardCore.DisplayManagement" Version="2.2.0" />
+    <PackageReference Include="OrchardCore.Navigation.Core" Version="2.2.0" />
+    <PackageReference Include="OrchardCore.ResourceManagement" Version="2.2.0" />
+    <PackageReference Include="OrchardCore.Settings" Version="2.2.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Caching.Memory" />
-    <PackageReference Include="System.Text.Json" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="9.0.8" />
+    <PackageReference Include="System.Text.Json" Version="9.0.8" />
   </ItemGroup>
 
 </Project>
