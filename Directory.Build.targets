@@ -12,7 +12,7 @@
     <PackageReference Update="OrchardCore.Settings" Version="2.2.1" />
     <PackageReference Update="Newtonsoft.Json" Version="13.0.4" />
     
-    <PackageReference Update="Microsoft.Extensions.Caching.Memory" Version="10.0.0-rc.2.25502.107" />
-    <PackageReference Update="System.Text.Json" Version="10.0.0-rc.2.25502.107" />
+    <PackageReference Update="Microsoft.Extensions.Caching.Memory" Version="10.0.0" />
+    <PackageReference Update="System.Text.Json" Version="10.0.0" />
   </ItemGroup>
 </Project>  
